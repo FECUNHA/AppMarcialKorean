@@ -46,7 +46,8 @@ pages:
   stage: publicar
   script:
     # Caminho do site: /<grupo>/<projeto>/ vira /<projeto>/ no Pages; com "domínio único" é a raiz.
-    - export BASE_PATH="$(node -e "const u=process.env.CI_PAGES_URL; console.log(u ? new URL(u).pathname : '/' + process.env.CI_PROJECT_NAME + '/')")"
+    - |
+      export BASE_PATH="$(node -e "const u = process.env.CI_PAGES_URL; console.log(u ? new URL(u).pathname : '/' + process.env.CI_PROJECT_NAME + '/')")"
     - echo "Publicando em ${CI_PAGES_URL:-?} (base ${BASE_PATH})"
     - npm run build
     # O GitLab Pages publica a pasta "public" do artefato; no Vite essa pasta é a de origem,
