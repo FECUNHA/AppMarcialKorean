@@ -74,33 +74,35 @@ Conteúdo inválido (2 problema(s)):
 
 O `npm run build` roda a mesma validação e não gera o build com conteúdo inválido.
 
-## Publicação (GitLab Pages)
+## Publicação (GitHub Pages)
 
-O `.gitlab-ci.yml` tem três jobs:
+Site: **https://fecunha.github.io/AppMarcialKorean/**
+
+O workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) roda em todo push e PR:
 
 | Job | Quando | O que faz |
 |---|---|---|
-| `verificar` | MR e todo push | `npm run lint`, `npm test`, `npm run validate:conteudo` |
-| `e2e` | MR e todo push | `npm run test:e2e -- --grep @smoke` na imagem do Playwright |
-| `pages` | push na branch padrão | build com o caminho do site e publicação no GitLab Pages |
+| `verificar` | push e PR | `npm run lint`, `npm test`, `npm run validate:conteudo` |
+| `e2e` | push e PR | `npm run test:e2e -- --grep @smoke` na imagem do Playwright |
+| `build` + `deploy` | push na `main` (ou manual) | build com o caminho do site e publicação no GitHub Pages |
 
-**Antes do primeiro deploy:** o GitLab Pages precisa estar habilitado na instância e no projeto
-(*Deploy > Pages*). A URL aparece nessa mesma tela depois do primeiro job `pages` verde.
+**Antes do primeiro deploy (uma vez):** *Settings > Pages > Build and deployment > Source* =
+**GitHub Actions**. Sem isso o job `deploy` falha.
 
-**Caminho do site:** no Pages o app fica em `https://<grupo>.<domínio-pages>/<projeto>/` — ou na raiz,
-se o projeto usar *domínio único*. O job `pages` lê `CI_PAGES_URL` e passa o caminho em `BASE_PATH`;
-o build ajusta rotas, manifest, service worker e URLs do conteúdo. Para gerar o mesmo build local:
+**Caminho do site:** o `actions/configure-pages` informa a base (`/AppMarcialKorean`, ou vazia com
+domínio próprio) e o build a recebe em `BASE_PATH`, ajustando rotas, manifest, service worker e URLs
+do conteúdo. Para gerar o mesmo build local:
 
 ```bash
-BASE_PATH=/<projeto>/ npm run build      # no Git Bash do Windows: MSYS_NO_PATHCONV=1 BASE_PATH=/<projeto>/ npm run build
+BASE_PATH=/AppMarcialKorean npm run build    # no Git Bash do Windows: prefixe com MSYS_NO_PATHCONV=1
 ```
 
 **Rotas do SPA:** o Pages não reescreve caminhos para o `index.html`; o build gera um `404.html` igual
-ao `index.html`, então um link direto como `/<projeto>/golpes/meori-chigi` abre o app (com status
+ao `index.html`, então um link direto como `/AppMarcialKorean/golpes/meori-chigi` abre o app (com status
 HTTP 404 no 1º acesso). Depois disso o service worker atende as navegações, inclusive offline.
 
-**Pasta `public`:** o Pages publica a pasta `public` do artefato, que no Vite é a pasta de origem. O
-job troca `public/` por `dist/` só dentro do CI — nada muda no repositório.
+**GitLab Pages (alternativa):** o [`.gitlab-ci.yml`](.gitlab-ci.yml) faz o mesmo num projeto GitLab — o
+job `pages` lê `CI_PAGES_URL` para a base e publica `dist/` como a pasta `public` exigida pelo GitLab.
 
 ## PWA e offline
 
