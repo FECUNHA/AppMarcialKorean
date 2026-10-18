@@ -1,0 +1,58 @@
+# GitLab Pages — Hwarang Kumdo (PWA estático gerado pelo Vite).
+# Pré-requisito: GitLab Pages habilitado na instância e no projeto (Deploy > Pages).
+
+stages:
+  - verificar
+  - publicar
+
+default:
+  image: node:22-bookworm-slim
+  cache:
+    key:
+      files: [package-lock.json]
+    paths: [.npm/]
+  before_script:
+    - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+
+# Lint, testes unitários/integração e validação do conteúdo em todo MR e push.
+verificar:
+  stage: verificar
+  script:
+    - npm run lint
+    - npm test
+    - npm run validate:conteudo
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# Testes e2e de fumaça (não acessam o YouTube), no navegador da imagem oficial do Playwright.
+e2e:
+  stage: verificar
+  image: mcr.microsoft.com/playwright:v1.49.1-noble
+  variables:
+    CI: "true"
+  script:
+    - npm run test:e2e -- --grep @smoke
+  artifacts:
+    when: on_failure
+    expire_in: 7 days
+    paths: [test-results/, playwright-report/]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# Publica no GitLab Pages a partir da branch padrão.
+pages:
+  stage: publicar
+  script:
+    # Caminho do site: /<grupo>/<projeto>/ vira /<projeto>/ no Pages; com "domínio único" é a raiz.
+    - export BASE_PATH="$(node -e "const u=process.env.CI_PAGES_URL; console.log(u ? new URL(u).pathname : '/' + process.env.CI_PROJECT_NAME + '/')")"
+    - echo "Publicando em ${CI_PAGES_URL:-?} (base ${BASE_PATH})"
+    - npm run build
+    # O GitLab Pages publica a pasta "public" do artefato; no Vite essa pasta é a de origem,
+    # então o build (dist/) toma o lugar dela só dentro do job.
+    - rm -rf public && mv dist public
+  artifacts:
+    paths: [public]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

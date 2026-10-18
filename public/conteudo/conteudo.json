@@ -1,0 +1,198 @@
+{
+  "versao": "1.1.0",
+  "padrao_romanizacao": "Romanização Revisada do Coreano",
+  "categorias": [
+    {
+      "id": "cortes",
+      "nome": "Cortes",
+      "aplica_a": [
+        "golpes",
+        "videos"
+      ]
+    },
+    {
+      "id": "estocadas",
+      "nome": "Estocadas",
+      "aplica_a": [
+        "golpes",
+        "videos"
+      ]
+    },
+    {
+      "id": "defesas",
+      "nome": "Defesas",
+      "aplica_a": [
+        "golpes",
+        "videos"
+      ]
+    },
+    {
+      "id": "posturas",
+      "nome": "Posturas",
+      "aplica_a": [
+        "golpes",
+        "videos"
+      ]
+    },
+    {
+      "id": "formas",
+      "nome": "Formas",
+      "aplica_a": [
+        "golpes",
+        "videos"
+      ]
+    },
+    {
+      "id": "historia",
+      "nome": "História",
+      "aplica_a": [
+        "videos"
+      ]
+    },
+    {
+      "id": "treinos",
+      "nome": "Treinos",
+      "aplica_a": [
+        "videos"
+      ]
+    }
+  ],
+  "capitulos": [
+    {
+      "id": "o-que-e",
+      "ordem": 1,
+      "titulo": "O que é o Hwarang Kumdo",
+      "texto": "Hwarang Kumdo (검도 – O Caminho da Espada) é uma arte marcial coreana de espada, apresentada como \"o caminho da espada do guerreiro\". Combina cortes, formas, treino em duplas, respiração e meditação, com foco em disciplina, coordenação e condicionamento físico.",
+      "imagens": []
+    },
+    {
+      "id": "significado-do-nome",
+      "ordem": 2,
+      "titulo": "Significado do nome",
+      "texto": "**Hwarang:** remete aos jovens guerreiros da antiga Coreia, associados ao Reino de Silla.\n\n**Kumdo:** significa \"caminho da espada\" (검도), termo conceitualmente equivalente ao japonês kendo.",
+      "imagens": []
+    },
+    {
+      "id": "como-e-treinado",
+      "ordem": 3,
+      "titulo": "Como é treinado",
+      "texto": "O treino costuma incluir formas (sequências de movimentos com espada), cortes e técnicas de ataque e defesa, treino em duplas simulando confrontos controlados, e trabalho de respiração, meditação, postura, equilíbrio e flexibilidade.",
+      "imagens": []
+    },
+    {
+      "id": "equipamentos",
+      "ordem": 4,
+      "titulo": "Equipamentos",
+      "texto": "**Ka Kum:** espada sem corte, usada para treino seguro e controle técnico.\n\n**Jin Kum:** espada com corte, usada na prática avançada/tradicional, com critérios rigorosos de segurança.",
+      "imagens": []
+    },
+    {
+      "id": "diferencas-outras-artes",
+      "ordem": 5,
+      "titulo": "Diferenças para outras artes de espada",
+      "texto": "**Kumdo esportivo:** fortemente ligado ao kendo japonês, introduzido na Coreia durante a ocupação japonesa (1910–1945). Enfatiza duelos entre dois praticantes, com equipamento de proteção e espada de bambu (jukdo), e golpes pontuados em alvos definidos.\n\n**Haedong Gumdo:** arte coreana de espada formalizada por volta de 1982. Já o Hwarang Kumdo é frequentemente descrito no Brasil como uma vertente ligada ao Taekwondo e ao Hapkido, não como parte do Kum Sool tradicional.",
+      "imagens": []
+    },
+    {
+      "id": "contexto-historico",
+      "ordem": 6,
+      "titulo": "Contexto histórico",
+      "texto": "A associação dos antigos Hwarang a um sistema marcial organizado é debatida por pesquisadores, e não há evidência conclusiva de que praticassem uma arte estruturada equivalente ao Hwarang Kumdo atual.\n\n**Em resumo:** Hwarang Kumdo é uma prática moderna de esgrima marcial coreana, voltada à técnica de espada, à disciplina mental e ao desenvolvimento físico — mais do que uma reconstrução comprovada do combate dos guerreiros Hwarang históricos.",
+      "imagens": []
+    },
+    {
+      "id": "kumdo-caminho-da-espada",
+      "ordem": 7,
+      "titulo": "Kumdo: o caminho da espada",
+      "texto": "Kumdo (검도) é o termo coreano para “o caminho da espada” e, no sentido mais comum, é a versão coreana do kendo japonês: uma arte marcial moderna de esgrima com espada de bambu, armadura protetora e combates pontuados.\n\n**O que é praticado:** os praticantes usam um jukto (espada de bambu) e equipamento de proteção semelhante ao do kendo.\n\nO treino inclui posturas, cortes, bloqueios, formas, sparring controlado e regras de etiqueta.\n\nEm competições, os pontos vêm de golpes válidos em áreas específicas, como cabeça, punhos e tronco.",
+      "imagens": []
+    },
+    {
+      "id": "kumdo-x-kendo",
+      "ordem": 8,
+      "titulo": "Kumdo x Kendo",
+      "texto": "**Origem do termo:** no kumdo, “caminho da espada” em coreano; no kendo, o mesmo conceito, em japonês.\n\n**Relação histórica:** o kumdo é derivado e adaptado do kendo no contexto coreano; o kendo é a tradição japonesa de esgrima moderna.\n\n**Terminologia:** o kumdo usa termos coreanos; o kendo, termos japoneses.\n\n**Prática competitiva:** muito semelhante — a Coreia compete em eventos internacionais de kendo, que é o padrão internacional de referência.\n\n**Diferenças visíveis:** no kumdo, etiqueta, bandeiras dos árbitros e pequenas variações de uniforme; no kendo, as convenções japonesas tradicionais.\n\nO kumdo e o kendo compartilham a mesma raiz escrita, 劍道, e são muito próximos em equipamento, regras e filosofia; as diferenças principais são linguísticas, culturais e de etiqueta.",
+      "imagens": []
+    },
+    {
+      "id": "nao-confundir-haidong-gumdo",
+      "ordem": 9,
+      "titulo": "Não confundir com Haidong Gumdo",
+      "texto": "“Kumdo” também pode ser um termo guarda-chuva para artes de espada coreanas. O Haidong Gumdo é uma vertente distinta, com movimentos mais amplos e fluidos, inspirados em técnicas supostamente de campo de batalha, enquanto o kumdo/kendo competitivo prioriza duelos um contra um, precisão e golpes controlados.\n\n**Em resumo:** se alguém disser apenas “Korean Kumdo”, normalmente está se referindo ao kendo praticado na Coreia com terminologia e adaptações coreanas.",
+      "imagens": []
+    }
+  ],
+  "golpes": [
+    {
+      "id": "meori-chigi",
+      "nome_hangul": "머리치기",
+      "nome_romanizado": "Meori chigi",
+      "nome_pt": "Corte na cabeça",
+      "categoria": "cortes",
+      "descricao": "Corte vertical descendente com alvo na cabeça do oponente, braços estendidos à frente ao final do movimento.",
+      "faixa": "A definir",
+      "imagem": "golpes/meori-chigi.webp",
+      "alt": "Praticante de perfil finalizando um corte vertical com a espada à altura da cabeça"
+    },
+    {
+      "id": "sonmok-chigi",
+      "nome_hangul": "손목치기",
+      "nome_romanizado": "Sonmok chigi",
+      "nome_pt": "Corte no punho",
+      "categoria": "cortes",
+      "descricao": "Corte curto e descendente com alvo no punho do oponente, lâmina levemente inclinada para baixo.",
+      "faixa": "A definir",
+      "imagem": "golpes/sonmok-chigi.webp",
+      "alt": "Praticante de perfil com a espada estendida à frente, inclinada para baixo, à altura do peito"
+    },
+    {
+      "id": "heori-chigi",
+      "nome_hangul": "허리치기",
+      "nome_romanizado": "Heori chigi",
+      "nome_pt": "Corte na cintura",
+      "categoria": "cortes",
+      "descricao": "Corte horizontal com alvo na lateral da cintura do oponente, com rotação do tronco acompanhando a lâmina.",
+      "faixa": "A definir",
+      "imagem": "golpes/heori-chigi.webp",
+      "alt": "Praticante de perfil girando o tronco num corte horizontal à altura da cintura"
+    },
+    {
+      "id": "jjireugi",
+      "nome_hangul": "찌르기",
+      "nome_romanizado": "Jjireugi",
+      "nome_pt": "Estocada",
+      "categoria": "estocadas",
+      "descricao": "Ataque em linha reta com a ponta da espada, em base longa com o joelho da frente flexionado.",
+      "faixa": "A definir",
+      "imagem": "golpes/jjireugi.webp",
+      "alt": "Praticante em base longa avançando a ponta da espada em linha reta"
+    },
+    {
+      "id": "makgi",
+      "nome_hangul": "막기",
+      "nome_romanizado": "Makgi",
+      "nome_pt": "Defesa/bloqueio",
+      "categoria": "defesas",
+      "descricao": "Bloqueio alto com a espada na horizontal acima da cabeça, protegendo contra um corte descendente.",
+      "faixa": "A definir",
+      "imagem": "golpes/makgi.webp",
+      "alt": "Praticante segurando a espada na horizontal acima da cabeça em posição de defesa"
+    }
+  ],
+  "videos": [
+    {
+      "id": "haidong-gumdo-demo",
+      "youtube_id": "qjrYw-LjlB0",
+      "titulo": "Korean Sword - Haidong Gumdo",
+      "duracao": "PT50S",
+      "categoria": "treinos"
+    },
+    {
+      "id": "haedong-kumdo-basico-espada",
+      "youtube_id": "2mG4A7Sr1fU",
+      "titulo": "Haedong Kumdo - The basics: how to use your sword",
+      "duracao": "PT10M7S",
+      "categoria": "treinos"
+    }
+  ]
+}

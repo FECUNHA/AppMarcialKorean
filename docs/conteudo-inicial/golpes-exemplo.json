@@ -1,0 +1,70 @@
+{
+  "_status": "Exemplo para desenvolvimento. Nomes, descrições e faixas a validar com o mestre (PRD C1, C2). Ilustrações geradas por IA, provisórias.",
+  "padrao_romanizacao": "Romanização Revisada do Coreano",
+  "categorias": [
+    { "id": "cortes", "nome": "Cortes", "aplica_a": ["golpes", "videos"] },
+    { "id": "estocadas", "nome": "Estocadas", "aplica_a": ["golpes", "videos"] },
+    { "id": "defesas", "nome": "Defesas", "aplica_a": ["golpes", "videos"] },
+    { "id": "posturas", "nome": "Posturas", "aplica_a": ["golpes", "videos"] },
+    { "id": "formas", "nome": "Formas", "aplica_a": ["golpes", "videos"] },
+    { "id": "historia", "nome": "História", "aplica_a": ["videos"] },
+    { "id": "treinos", "nome": "Treinos", "aplica_a": ["videos"] }
+  ],
+  "golpes": [
+    {
+      "id": "meori-chigi",
+      "nome_hangul": "머리치기",
+      "nome_romanizado": "Meori chigi",
+      "nome_pt": "Corte na cabeça",
+      "categoria": "cortes",
+      "descricao": "Corte vertical descendente com alvo na cabeça do oponente, braços estendidos à frente ao final do movimento.",
+      "faixa": "A definir",
+      "imagem": "golpes/meori-chigi.webp",
+      "alt": "Praticante de perfil finalizando um corte vertical com a espada à altura da cabeça"
+    },
+    {
+      "id": "sonmok-chigi",
+      "nome_hangul": "손목치기",
+      "nome_romanizado": "Sonmok chigi",
+      "nome_pt": "Corte no punho",
+      "categoria": "cortes",
+      "descricao": "Corte curto e descendente com alvo no punho do oponente, lâmina levemente inclinada para baixo.",
+      "faixa": "A definir",
+      "imagem": "golpes/sonmok-chigi.webp",
+      "alt": "Praticante de perfil com a espada estendida à frente, inclinada para baixo, à altura do peito"
+    },
+    {
+      "id": "heori-chigi",
+      "nome_hangul": "허리치기",
+      "nome_romanizado": "Heori chigi",
+      "nome_pt": "Corte na cintura",
+      "categoria": "cortes",
+      "descricao": "Corte horizontal com alvo na lateral da cintura do oponente, com rotação do tronco acompanhando a lâmina.",
+      "faixa": "A definir",
+      "imagem": "golpes/heori-chigi.webp",
+      "alt": "Praticante de perfil girando o tronco num corte horizontal à altura da cintura"
+    },
+    {
+      "id": "jjireugi",
+      "nome_hangul": "찌르기",
+      "nome_romanizado": "Jjireugi",
+      "nome_pt": "Estocada",
+      "categoria": "estocadas",
+      "descricao": "Ataque em linha reta com a ponta da espada, em base longa com o joelho da frente flexionado.",
+      "faixa": "A definir",
+      "imagem": "golpes/jjireugi.webp",
+      "alt": "Praticante em base longa avançando a ponta da espada em linha reta"
+    },
+    {
+      "id": "makgi",
+      "nome_hangul": "막기",
+      "nome_romanizado": "Makgi",
+      "nome_pt": "Defesa/bloqueio",
+      "categoria": "defesas",
+      "descricao": "Bloqueio alto com a espada na horizontal acima da cabeça, protegendo contra um corte descendente.",
+      "faixa": "A definir",
+      "imagem": "golpes/makgi.webp",
+      "alt": "Praticante segurando a espada na horizontal acima da cabeça em posição de defesa"
+    }
+  ]
+}

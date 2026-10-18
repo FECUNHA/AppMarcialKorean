@@ -1,0 +1,50 @@
+schema: spec-driven
+
+# Shown to the AI when generating each artifact (proposal/design/tasks/specs).
+context: |
+  Stack: TypeScript, React 18, Vite, vite-plugin-pwa (Workbox), React Router,
+  Vitest + Testing Library (unit/integration), Playwright (smoke e2e).
+  Language for interviews and artifacts: pt-BR.
+  All artifacts must be written in pt-BR. Keep OpenSpec structural headings and SHALL/MUST
+  keywords in English.
+  TDD (test before code). MR required and reviewed before merge.
+
+  Product: PWA de estudo para alunos de Hwarang Kumdo (arte marcial coreana de espada) —
+  módulos História, Golpes, Vídeos e Quiz. Sem login, sem backend próprio: todo o conteúdo vem
+  de um arquivo JSON versionado no repositório (public/conteudo/conteudo.json) e fica em cache
+  para uso offline. Estado do aluno (favoritos, melhor pontuação) só no armazenamento local do
+  navegador. Vídeos são links do YouTube reproduzidos pelo player incorporado oficial.
+
+  Every change originates from a requirement in the PRD at docs/prds/app-hwarang-kumdo/PRD.md,
+  the SINGLE SOURCE OF TRUTH for business requirements (R<n> = RF<nn> e RNF<n> = RNF<nn> da
+  Especificação Funcional). Stamp the PRD ids — `(R7)`, `(RNF2)` — on every
+  `### Requirement:` header and every top-level task.
+  Change name: plain <slug> while there is no tracker (feature-<N>-<slug> once there is).
+  Branch: feat|fix|chore/<change-name>.
+  Change order: setup-pwa-base → (add-modulo-historia | add-modulo-golpes) →
+  (add-modulo-videos | add-modulo-quiz). setup-pwa-base is a prerequisite of every other change;
+  videos and quiz depend on golpes.
+
+  Commands: lint `npm run lint` · test `npm test` · build `npm run build` ·
+  smoke `npm run test:e2e -- --grep @smoke`.
+
+  Flow (OpenSpec /opsx:*): /opsx:explore → /opsx:propose → /opsx:apply → MR reviewed →
+  /opsx:archive (merges delta specs into openspec/specs/).
+  Specs in openspec/specs/ are the source of truth for what the system does.
+
+rules:
+  proposal:
+    - Include a "Non-goals" section.
+    - Reference the source Feature (number + URL when available) and the PRD path at the top.
+    - >-
+      Open with an "Affects" section — what this change touches (modules/routes/contracts) and
+      any paired change in a sibling repo, linked by name.
+    - Focus on the problem (WHY) before the solution.
+  specs:
+    - Behaviors in Given/When/Then.
+  tasks:
+    - Small, verifiable chunks (ideally < 2h each).
+    - >-
+      Every task is a VERTICAL SLICE whose first subtask is the test (TDD: name the seam;
+      never a standalone "write the tests" task).
+    - Every code change leaves lint / test / build green (and accessibility AA where it applies).

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#9f1d20"/>
+  <g fill="#ffffff">
+    <!-- lâmina -->
+    <path d="M256 92 L276 128 L276 318 L236 318 L236 128 Z"/>
+    <!-- guarda -->
+    <rect x="186" y="318" width="140" height="22" rx="11"/>
+    <!-- empunhadura -->
+    <rect x="243" y="340" width="26" height="70" rx="6"/>
+    <!-- pomo -->
+    <circle cx="256" cy="420" r="14"/>
+  </g>
+</svg>
