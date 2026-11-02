@@ -19,7 +19,7 @@ const page = await browser.newPage()
 for (const { arquivo, tamanho, escala } of ICONES) {
   await page.setViewportSize({ width: tamanho, height: tamanho })
   await page.setContent(
-    `<html><body style="margin:0;background:#9f1d20;display:grid;place-items:center;height:100vh">
+    `<html><body style="margin:0;background:#49B6E5;display:grid;place-items:center;height:100vh">
       <div style="width:${tamanho * escala}px;height:${tamanho * escala}px">${svg.replace('<svg ', '<svg width="100%" height="100%" ')}</div>
     </body></html>`,
   )

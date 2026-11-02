@@ -144,16 +144,25 @@ job `pages` lê `CI_PAGES_URL` para a base e publica `dist/` como a pasta `publi
 ## Desempenho (RNF3)
 
 Lighthouse CI 0.13 (Lighthouse 11.4), perfil mobile padrão (Moto G Power, 4G lento simulado),
-build servido com gzip, mediana de 3 execuções — medido em 2026-10-18 com os 4 módulos prontos:
+build servido com gzip, mediana de 3 execuções — medido em 2026-11-02, com o tema Doodle:
 
 | Métrica | Resultado | Meta |
 |---|---|---|
-| Largest Contentful Paint (mediana) | 2,9 s (execuções: 2.618–2.937 ms) | ≤ 3 s |
+| Largest Contentful Paint (mediana) | 1,06 s (execuções: 1.017–1.127 ms) | ≤ 3 s |
+| First Contentful Paint | igual ao LCP (o `h1` da tela inicial) | — |
 | Instalabilidade (`installable-manifest`) | passa | passa |
-| Nota de performance | 0,90–0,93 | — |
+| Nota de performance | 0,98–1,00 | — |
 
-A folga é pequena e varia entre execuções. Ajustes feitos: CSS embutido no `index.html`, registro do
-service worker com `defer`, schema (Zod) carregado sob demanda e **telas de módulo com `lazy`** nas
-rotas (o bundle inicial leva só a casca e a tela inicial; cada módulo é um chunk pré-cacheado). O que
-resta no bundle inicial é basicamente React + React Router; mudanças na casca ou na tela inicial
-devem rodar `npm run lighthouse`.
+O que sustenta esse número:
+
+- **Casca da tela inicial pré-renderizada** no `index.html` (plugin `casca-pre-renderizada` do
+  `vite.config.ts`, a partir de `src/app/prerender.tsx`): o `h1` pinta antes do JS. O app **hidrata**
+  esse HTML (`hydrateRoot` em `src/main.tsx`) — recriar os nós contaria um LCP tardio. Um teste garante
+  que o HTML pré-renderizado é igual ao 1º render; nas outras rotas um script inline o descarta.
+- **Fonte manuscrita pré-carregada** (`<link rel="preload">`, 19 KB) para o texto não mudar de tamanho
+  depois de pintar.
+- CSS embutido no `index.html`, registro do service worker com `defer`, schema (Zod) e telas de módulo
+  carregados sob demanda.
+
+Ao mudar a tela inicial, a barra de abas ou o `LayoutRaiz`, rode `npm test` (o teste da casca acusa
+divergência) e `npm run lighthouse`.

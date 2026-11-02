@@ -41,6 +41,10 @@ Negrito da Delius é sintético (só 400 existe); títulos usam o peso 400 e gan
 ### D5 — Manifest e cor de tema
 `theme_color` = `#263D5B` (barra do sistema escura, ícone branco legível) e `background_color` = `--cor-papel`. O ícone do app ganha o fundo `#49B6E5` com traço escuro, gerado pelo `scripts/gerar-icones.ts` existente.
 
+### D6 — Casca da tela inicial pré-renderizada no build (achado do 4.1)
+Com as fontes do tema o LCP mediano foi a 3,1 s (LCP = FCP = `h1` da tela inicial, que só pinta depois do JS de ~218 KB). O build passa a injetar no `#root` do `index.html` o HTML estático da tela inicial + barra de abas, gerado com `renderToStaticMarkup` dos próprios componentes (nada de HTML duplicado à mão); o React assume o `#root` ao carregar. Um script inline mínimo limpa esse HTML quando o caminho não é a tela inicial (link direto, `404.html`, fallback do service worker), evitando piscar a tela inicial em outras rotas. Um teste unitário garante que o HTML pré-renderizado é igual ao primeiro render do app.
+*Alternativas:* (a) cortar fontes ou o negrito do hangul — ganho pequeno e instável; (b) SSR/hidratação completa — desproporcional para um PWA estático.
+
 ## Risks / Trade-offs
 
 - [Fonte manuscrita em textos longos (capítulos da História) cansa a leitura] → Delius é legível em 16 px+; altura de linha 1,6 e largura máxima de 65 caracteres já existentes.

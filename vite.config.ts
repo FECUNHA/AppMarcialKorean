@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { defineConfig, type Plugin } from 'vite'
+import { createServer, defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -32,6 +32,57 @@ function cssEmbutido(): Plugin {
 const base = `/${(process.env.BASE_PATH ?? '/').replace(/^\/+|\/+$/g, '')}/`.replace(/\/{2,}/g, '/')
 
 /**
+ * Injeta no #root do index.html o HTML estático da tela inicial (redesign-visual-doodle, D6): o `h1`
+ * pinta antes do JS (RNF3). O HTML vem dos próprios componentes (src/app/prerender.tsx); um script
+ * inline o descarta quando o caminho não é a tela inicial, para outras rotas não piscarem a inicial.
+ */
+function cascaPreRenderizada(): Plugin {
+  return {
+    name: 'casca-pre-renderizada',
+    apply: 'build',
+    async transformIndexHtml(html) {
+      const servidor = await createServer({
+        configFile: false,
+        root: process.cwd(),
+        logLevel: 'error',
+        appType: 'custom',
+        server: { middlewareMode: true, hmr: false, ws: false },
+        optimizeDeps: { noDiscovery: true, include: [] },
+        plugins: [react()],
+      })
+      try {
+        const { renderizarCasca } = (await servidor.ssrLoadModule('/src/app/prerender.tsx')) as {
+          renderizarCasca: (base: string) => string
+        }
+        const guarda = `<script>(function(){var b=${JSON.stringify(base)},p=location.pathname;if(p!==b&&p!==b.slice(0,-1)&&p!==b+'index.html')document.getElementById('root').innerHTML=''})()</script>`
+        return html.replace('<div id="root"></div>', `<div id="root">${renderizarCasca(base)}</div>\n    ${guarda}`)
+      } finally {
+        await servidor.close()
+      }
+    },
+  }
+}
+
+/**
+ * Pré-carrega a fonte manuscrita (19 KB) junto com o HTML (redesign-visual-doodle, D6). Sem isso ela
+ * chega depois do JS, o texto da casca troca de fonte, cresce e vira um LCP tardio.
+ */
+function preloadFonteTema(): Plugin {
+  return {
+    name: 'preload-fonte-tema',
+    apply: 'build',
+    enforce: 'post',
+    generateBundle(_, bundle) {
+      const html = bundle['index.html']
+      const fonte = Object.keys(bundle).find((f) => /delius-swash-caps-latin-400-normal-[\w-]+\.woff2$/.test(f))
+      if (html?.type !== 'asset' || !fonte) return
+      const link = `<link rel="preload" href="${base}${fonte}" as="font" type="font/woff2" crossorigin>`
+      html.source = String(html.source).replace('</title>', `</title>\n    ${link}`)
+    },
+  }
+}
+
+/**
  * GitLab Pages não reescreve rotas do SPA para o index.html; ele serve `404.html` para caminhos
  * desconhecidos. Uma cópia do index.html como 404.html faz `/golpes/meori-chigi` abrir o app
  * mesmo no 1º acesso (depois disso o service worker atende as navegações).
@@ -55,6 +106,8 @@ export default defineConfig({
   plugins: [
     react(),
     cssEmbutido(),
+    cascaPreRenderizada(),
+    preloadFonteTema(),
     paginaSpa404(),
     // Design D4: autoUpdate — o novo service worker assume no próximo carregamento (RNF9).
     VitePWA({
@@ -70,8 +123,8 @@ export default defineConfig({
         scope: base,
         display: 'standalone',
         orientation: 'portrait',
-        theme_color: '#9f1d20',
-        background_color: '#faf7f2',
+        theme_color: '#263D5B',
+        background_color: '#F8F5EE',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },

@@ -17,6 +17,8 @@
     "test:e2e:externo": "playwright test --grep @externo"
   },
   "dependencies": {
+    "@fontsource/delius-swash-caps": "5.2.5",
+    "@fontsource/jetbrains-mono": "5.2.5",
     "@fontsource/noto-sans-kr": "5.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
