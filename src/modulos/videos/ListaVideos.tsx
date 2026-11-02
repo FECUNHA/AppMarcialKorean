@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { ComConteudo } from '../../conteudo/ConteudoProvider'
 import type { Conteudo, Video } from '../../conteudo/schema'
+import { useConteudo } from '../../conteudo/useConteudo'
 import { useOnline } from '../../lib/useOnline'
 import { AvisoSemInternet } from './AvisoSemInternet'
 import { formatarDuracao } from './duracao'
@@ -17,6 +18,7 @@ export function TelaVideos() {
 }
 
 function CatalogoVideos({ conteudo }: { conteudo: Conteudo }) {
+  const estado = useConteudo()
   const online = useOnline()
   const [params, setParams] = useSearchParams()
   const categoria = params.get('categoria') ?? 'todas'
@@ -32,6 +34,15 @@ function CatalogoVideos({ conteudo }: { conteudo: Conteudo }) {
   }
 
   if (!online) return <AvisoSemInternet />
+  if (estado.estado === 'pronto' && estado.videosIndisponiveis)
+    return (
+      <div role="alert" className="aviso-erro">
+        <p>Não foi possível carregar os vídeos.</p>
+        <button type="button" className="botao" onClick={estado.tentarDeNovo}>
+          Tentar de novo
+        </button>
+      </div>
+    )
   if (conteudo.videos.length === 0) return <p className="vazio">Nenhum vídeo disponível ainda.</p>
   return (
     <>
@@ -75,7 +86,7 @@ function CartaoVideo({ video, categoria }: { video: Video; categoria: string }) 
           loading="lazy"
           decoding="async"
         />
-        <span className="cartao-video__duracao">{formatarDuracao(video.duracao)}</span>
+        {video.duracao && <span className="cartao-video__duracao">{formatarDuracao(video.duracao)}</span>}
       </span>
       <span className="cartao-video__titulo">{video.titulo}</span>
       <span className="cartao-video__categoria">{categoria}</span>

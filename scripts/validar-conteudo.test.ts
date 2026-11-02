@@ -2,7 +2,7 @@
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { conteudoValido } from '../src/test/fixtures/conteudo'
+import { arquivoVideos, conteudoValido } from '../src/test/fixtures/conteudo'
 import { validarConteudoPublicado } from './validar-conteudo'
 
 /** PNG com cabeçalho IHDR real (largura × altura) completado com zeros até `bytes`. */
@@ -21,10 +21,17 @@ function png(largura: number, altura: number, bytes = 1024) {
 
 let raiz: string
 
-function publicar(conteudo: unknown, imagens: Record<string, Buffer>) {
+/**
+ * Publica conteudo.json, as imagens e videos.json — por padrão os vídeos da fixture no formato do
+ * curador; `videos: null` não cria o arquivo e uma string é gravada como está (JSON quebrado).
+ */
+function publicar(conteudo: unknown, imagens: Record<string, Buffer>, videos?: unknown) {
   const dir = join(raiz, 'public', 'conteudo')
   mkdirSync(join(dir, 'golpes'), { recursive: true })
   writeFileSync(join(dir, 'conteudo.json'), JSON.stringify(conteudo))
+  const arquivo = videos === undefined ? arquivoVideos(conteudo as Parameters<typeof arquivoVideos>[0]) : videos
+  if (arquivo !== null)
+    writeFileSync(join(dir, 'videos.json'), typeof arquivo === 'string' ? arquivo : JSON.stringify(arquivo))
   for (const [arquivo, dados] of Object.entries(imagens)) writeFileSync(join(dir, arquivo), dados)
 }
 
@@ -82,5 +89,36 @@ describe('scripts/validar-conteudo (R3, RNF4)', () => {
     publicar({}, {})
     writeFileSync(join(raiz, 'public', 'conteudo', 'conteudo.json'), '{ isso não é json')
     expect(validarConteudoPublicado(raiz)[0]).toMatch(/^conteudo\.json não é um JSON válido/)
+  })
+})
+
+describe('scripts/validar-conteudo — videos.json (R13)', () => {
+  const imagens = () => ({ 'golpes/meori-chigi.png': png(400, 400) })
+
+  test('videos.json válido passa', () => {
+    publicar(comImagem('golpes/meori-chigi.png'), imagens(), {
+      videos: [{ url: 'https://www.youtube.com/watch?v=2mG4A7Sr1fU&t=5s', titulo: 'Básico', categoria: 'treinos' }],
+    })
+    expect(validarConteudoPublicado(raiz)).toEqual([])
+  })
+
+  test('link inválido falha indicando a posição', () => {
+    publicar(comImagem('golpes/meori-chigi.png'), imagens(), {
+      videos: [
+        { url: 'https://youtu.be/qjrYw-LjlB0', titulo: 'Ok', categoria: 'treinos' },
+        { url: 'https://vimeo.com/123456', titulo: 'Fora', categoria: 'treinos' },
+      ],
+    })
+    expect(validarConteudoPublicado(raiz)).toEqual(['vídeo #2: link do YouTube inválido (https://vimeo.com/123456)'])
+  })
+
+  test('videos.json ausente falha citando o arquivo', () => {
+    publicar(comImagem('golpes/meori-chigi.png'), imagens(), null)
+    expect(validarConteudoPublicado(raiz)[0]).toMatch(/^videos\.json não é um JSON válido ou não foi encontrado/)
+  })
+
+  test('videos.json quebrado falha citando o arquivo', () => {
+    publicar(comImagem('golpes/meori-chigi.png'), imagens(), '{ quebrado')
+    expect(validarConteudoPublicado(raiz)[0]).toMatch(/^videos\.json não é um JSON válido/)
   })
 })

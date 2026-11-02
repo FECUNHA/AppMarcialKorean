@@ -42,7 +42,7 @@ function DetalheVideo({ video, conteudo }: { video: Video; conteudo: Conteudo })
     <article className="detalhe-video">
       <h1>{video.titulo}</h1>
       <p className="detalhe-video__meta">
-        {categoria} · {formatarDuracao(video.duracao)}
+        {video.duracao ? `${categoria} · ${formatarDuracao(video.duracao)}` : categoria}
       </p>
       <div className="detalhe-video__player">
         {online ? <PlayerYoutube youtubeId={video.youtube_id} titulo={video.titulo} /> : <AvisoSemInternet />}

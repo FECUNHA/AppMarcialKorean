@@ -37,15 +37,41 @@ Antes de abrir um MR: `npm run lint`, `npm test`, `npm run build` e
 
 ## Como editar o conteúdo (curador)
 
-Todo o conteúdo fica em **`public/conteudo/conteudo.json`**:
+O conteúdo fica em dois arquivos em `public/conteudo/`:
+
+**`conteudo.json`** — história, golpes e categorias:
 
 - `capitulos`: capítulos da História (`ordem` define a sequência; no máximo 3 `imagens` por capítulo).
 - `golpes`: golpes do catálogo.
 - `categorias`: categorias de golpes e vídeos (`aplica_a` diz onde cada uma vale).
-- `videos`: vídeos do YouTube (`youtube_id` com 11 caracteres; `duracao` no formato `PT4M12S`). O vídeo precisa
-  permitir incorporação; senão o app mostra "Este vídeo não está disponível". Para ligar um vídeo a um golpe,
-  use `golpe_id` no vídeo e `video_id` no golpe.
 - `versao`: aumente a cada publicação (aparece no rodapé da tela inicial).
+
+**`videos.json`** — os vídeos do YouTube. Para incluir um vídeo, cole o link dele:
+
+```json
+{
+  "videos": [
+    {
+      "url": "https://www.youtube.com/watch?v=2mG4A7Sr1fU&t=5s",
+      "titulo": "Haedong Kumdo - The basics: how to use your sword",
+      "categoria": "treinos",
+      "duracao": "PT10M7S",
+      "golpe": "meori-chigi"
+    }
+  ]
+}
+```
+
+- `url`: o link do YouTube como você copia do navegador ou do botão *Compartilhar* — vale
+  `youtube.com/watch?v=…`, `youtu.be/…`, `youtube.com/shorts/…` ou `youtube.com/embed/…`, com ou sem
+  `&t=`/`?si=` (o tempo do link é ignorado; o vídeo começa do início).
+- `titulo` e `categoria` são obrigatórios (`categoria` precisa ter `videos` em `aplica_a`).
+- `duracao` é opcional, no formato `PT4M12S` (4 min 12 s); sem ela o app não mostra a duração.
+- `golpe` é opcional: o id de um golpe de `conteudo.json`; o vídeo aparece na seção "Vídeo" do detalhe
+  desse golpe.
+- O vídeo precisa permitir incorporação; senão o app mostra "Este vídeo não está disponível". O mesmo
+  vídeo não pode aparecer duas vezes. Se `videos.json` tiver um problema em produção, só o módulo
+  Vídeos avisa — o resto do app continua funcionando.
 
 Regras que a validação cobra:
 
@@ -67,9 +93,10 @@ npm run validate:conteudo
 Se algo estiver errado, o comando lista cada problema e sai com erro, por exemplo:
 
 ```
-Conteúdo inválido (2 problema(s)):
+Conteúdo inválido (3 problema(s)):
   - golpe meori-chigi: campo nome_pt ausente
   - golpe jjireugi: imagem golpes/jjireugi.webp tem 350 KB (máximo 200 KB)
+  - vídeo #2: link do YouTube inválido (https://vimeo.com/123456)
 ```
 
 O `npm run build` roda a mesma validação e não gera o build com conteúdo inválido.

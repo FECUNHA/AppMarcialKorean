@@ -24,7 +24,7 @@ describe('Vídeos sem internet (R14, RN10)', () => {
 
   test('cair a conexão troca o player do vídeo pelo aviso', async () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
-    renderRota('/videos/yt-001', conteudoVideos())
+    renderRota('/videos/AAAAAAAAAAA', conteudoVideos())
     expect(await screen.findByTestId('player-youtube')).toBeInTheDocument()
     act(() => definirConexao(false))
     expect(screen.queryByTestId('player-youtube')).not.toBeInTheDocument()

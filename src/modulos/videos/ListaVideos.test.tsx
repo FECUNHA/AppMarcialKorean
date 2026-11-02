@@ -15,7 +15,7 @@ describe('Lista de vídeos (R13)', () => {
     expect(item.getByText('Meori chigi passo a passo')).toBeInTheDocument()
     expect(item.getByText('4:12')).toBeInTheDocument()
     expect(item.getByText('Cortes')).toBeInTheDocument()
-    expect(item.getByRole('link')).toHaveAttribute('href', '/videos/yt-001')
+    expect(item.getByRole('link')).toHaveAttribute('href', '/videos/AAAAAAAAAAA')
   })
 
   test('sem vídeos no conteúdo mostra aviso', async () => {

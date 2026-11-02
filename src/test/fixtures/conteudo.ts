@@ -169,3 +169,19 @@ export function conteudoQuiz() {
     ],
   }
 }
+
+/**
+ * `videos.json` correspondente aos `videos` (formato interno) de uma fixture de conteúdo:
+ * cada vídeo vira um link do YouTube, como o curador cadastra (videos-em-arquivo-proprio, D1).
+ */
+export function arquivoVideos(conteudo: { videos?: { youtube_id: string; titulo: string; duracao?: string; categoria: string; golpe_id?: string }[] }) {
+  return {
+    videos: (conteudo.videos ?? []).map((v) => ({
+      url: `https://www.youtube.com/watch?v=${v.youtube_id}`,
+      titulo: v.titulo,
+      categoria: v.categoria,
+      ...(v.duracao && { duracao: v.duracao }),
+      ...(v.golpe_id && { golpe: v.golpe_id }),
+    })),
+  }
+}

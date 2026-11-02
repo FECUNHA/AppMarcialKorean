@@ -1,12 +1,13 @@
 /**
- * Valida public/conteudo/conteudo.json antes do build (design D3).
+ * Valida public/conteudo/conteudo.json e public/conteudo/videos.json antes do build (design D3 de
+ * setup-pwa-base, D4 de videos-em-arquivo-proprio).
  * Uso: npm run validate:conteudo — sai com código 1 e lista os problemas quando o conteúdo é inválido.
  */
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { imageSize } from 'image-size'
-import { validarConteudo } from '../src/conteudo/schema'
+import { validarConteudo, validarVideos } from '../src/conteudo/schema'
 
 const LIMITE_KB = 200
 
@@ -23,6 +24,13 @@ export function validarConteudoPublicado(raiz: string): string[] {
   if (!resultado.ok) return resultado.erros
 
   const erros: string[] = []
+  try {
+    const videos = validarVideos(JSON.parse(readFileSync(join(dir, 'videos.json'), 'utf8')), resultado.conteudo)
+    if (!videos.ok) erros.push(...videos.erros)
+  } catch (e) {
+    erros.push(`videos.json não é um JSON válido ou não foi encontrado: ${(e as Error).message}`)
+  }
+
   for (const g of resultado.conteudo.golpes) {
     if (!g.imagem) continue
     const caminho = join(dir, g.imagem)

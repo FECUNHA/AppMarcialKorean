@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter, type RouteObject } from 'react-router-dom'
 import { futuroRouter, rotas } from '../app/rotas'
 import { ConteudoProvider } from '../conteudo/ConteudoProvider'
-import { conteudoValido } from './fixtures/conteudo'
+import { arquivoVideos, conteudoValido } from './fixtures/conteudo'
 
 /**
  * Renderiza a árvore de rotas real do app (seam do roteador), com conteúdo de fixture.
@@ -24,9 +24,17 @@ const rotasResolvidas = await resolverLazy(rotas)
 
 type Entrada = string | { pathname: string; search?: string; state?: unknown }
 
-export function renderRota(caminho: Entrada | Entrada[] = '/', conteudo: unknown = conteudoValido()) {
+export function renderRota(caminho: Entrada | Entrada[] = '/', conteudo: unknown = conteudoValido(), videos?: unknown) {
   const historico = Array.isArray(caminho) ? caminho : [caminho]
-  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(conteudo))))
+  // conteudo.json = a fixture; videos.json = os `videos` da fixture no formato do curador (ou `videos`, se dado).
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (url: string) =>
+      url.endsWith('/videos.json')
+        ? new Response(JSON.stringify(videos ?? arquivoVideos(conteudo as Parameters<typeof arquivoVideos>[0])))
+        : new Response(JSON.stringify(conteudo)),
+    ),
+  )
   const router = createMemoryRouter(rotasResolvidas, {
     initialEntries: historico,
     initialIndex: historico.length - 1,

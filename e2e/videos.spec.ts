@@ -2,22 +2,31 @@ import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
 import { expectSemViolacoes } from './a11y'
 
-/** Conteúdo real + vídeos de exemplo em Cortes, História e Treinos (ids fictícios: o YouTube fica bloqueado). */
-function conteudoComVideos() {
+/** Conteúdo real com a categoria História, que os vídeos de exemplo usam. */
+function conteudoReal() {
   const conteudo = JSON.parse(readFileSync('public/conteudo/conteudo.json', 'utf8'))
-  conteudo.videos = [
-    { id: 'e2e-cortes', youtube_id: 'AAAAAAAAAAA', titulo: 'Cortes básicos', duracao: 'PT4M12S', categoria: 'cortes' },
-    { id: 'e2e-historia', youtube_id: 'BBBBBBBBBBB', titulo: 'Origem do Hwarang', duracao: 'PT1H2M5S', categoria: 'historia' },
-    { id: 'e2e-treinos', youtube_id: 'CCCCCCCCCCC', titulo: 'Aquecimento', duracao: 'PT45S', categoria: 'treinos' },
-  ]
   if (!conteudo.categorias.some((c: { id: string }) => c.id === 'historia'))
     conteudo.categorias.push({ id: 'historia', nome: 'História', aplica_a: ['videos'] })
   return conteudo
 }
 
+/** videos.json de exemplo em Cortes, História e Treinos (links fictícios: o YouTube fica bloqueado). */
+const VIDEOS_EXEMPLO = {
+  videos: [
+    { url: 'https://www.youtube.com/watch?v=AAAAAAAAAAA', titulo: 'Cortes básicos', duracao: 'PT4M12S', categoria: 'cortes' },
+    { url: 'https://youtu.be/BBBBBBBBBBB?t=10', titulo: 'Origem do Hwarang', duracao: 'PT1H2M5S', categoria: 'historia' },
+    { url: 'https://www.youtube.com/shorts/CCCCCCCCCCC', titulo: 'Aquecimento', duracao: 'PT45S', categoria: 'treinos' },
+  ],
+}
+
+async function servirConteudo(page: Page, videos: unknown) {
+  await page.route('**/conteudo/conteudo.json', (rota) => rota.fulfill({ json: conteudoReal() }))
+  await page.route('**/conteudo/videos.json', (rota) => rota.fulfill({ json: videos }))
+}
+
 async function prepararSemYoutube(page: Page) {
   await page.route(/youtube\.com|youtube-nocookie\.com|ytimg\.com/, (rota) => rota.abort())
-  await page.route('**/conteudo/conteudo.json', (rota) => rota.fulfill({ json: conteudoComVideos() }))
+  await servirConteudo(page, VIDEOS_EXEMPLO)
 }
 
 test.describe('Módulo Vídeos (YouTube bloqueado)', () => {
@@ -69,7 +78,7 @@ test.describe('Módulo Vídeos (YouTube bloqueado)', () => {
 
   test('vídeo bloqueado no YouTube mostra "Este vídeo não está disponível" @smoke', async ({ page }) => {
     await prepararSemYoutube(page)
-    await page.goto('/videos/e2e-cortes')
+    await page.goto('/videos/AAAAAAAAAAA')
     await expect(page.getByRole('heading', { level: 1, name: 'Cortes básicos' })).toBeVisible()
     await expect(page.getByText('Este vídeo não está disponível')).toBeVisible()
   })
@@ -80,7 +89,7 @@ test.describe('Módulo Vídeos (YouTube bloqueado)', () => {
     await expect(page.getByRole('list', { name: 'Vídeos' }).getByRole('listitem')).toHaveCount(3)
     await expectSemViolacoes(page)
 
-    await page.goto('/videos/e2e-historia')
+    await page.goto('/videos/BBBBBBBBBBB')
     await expect(page.getByRole('heading', { level: 1, name: 'Origem do Hwarang' })).toBeVisible()
     await expectSemViolacoes(page)
   })
@@ -99,12 +108,10 @@ test.describe('Módulo Vídeos (YouTube bloqueado)', () => {
 test.describe('Módulo Vídeos (YouTube real)', () => {
   test('o player incorporado aponta para youtube-nocookie.com (RNF7) @externo', async ({ page }) => {
     const id = process.env.YT_VIDEO_ID ?? 'qjrYw-LjlB0'
-    await page.route('**/conteudo/conteudo.json', async (rota) => {
-      const conteudo = JSON.parse(readFileSync('public/conteudo/conteudo.json', 'utf8'))
-      conteudo.videos = [{ id: 'externo', youtube_id: id, titulo: 'Vídeo real', duracao: 'PT50S', categoria: 'treinos' }]
-      await rota.fulfill({ json: conteudo })
+    await servirConteudo(page, {
+      videos: [{ url: `https://www.youtube.com/watch?v=${id}&t=5s`, titulo: 'Vídeo real', categoria: 'treinos' }],
     })
-    await page.goto('/videos/externo')
+    await page.goto(`/videos/${id}`)
     const iframe = page.locator('.player-youtube iframe')
     await expect(iframe).toHaveAttribute('src', /^https:\/\/www\.youtube-nocookie\.com\/embed\//, { timeout: 20_000 })
     await expect(iframe).toHaveAttribute('title', 'Vídeo: Vídeo real')

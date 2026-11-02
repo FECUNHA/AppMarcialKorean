@@ -1,0 +1,16 @@
+{
+  "videos": [
+    {
+      "url": "https://www.youtube.com/watch?v=qjrYw-LjlB0",
+      "titulo": "Korean Sword - Haidong Gumdo",
+      "categoria": "treinos",
+      "duracao": "PT50S"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=2mG4A7Sr1fU&t=5s",
+      "titulo": "Haedong Kumdo - The basics: how to use your sword",
+      "categoria": "treinos",
+      "duracao": "PT10M7S"
+    }
+  ]
+}

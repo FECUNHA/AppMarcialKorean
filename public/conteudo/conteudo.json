@@ -1,5 +1,5 @@
 {
-  "versao": "1.1.0",
+  "versao": "1.2.0",
   "padrao_romanizacao": "Romanização Revisada do Coreano",
   "categorias": [
     {
@@ -177,22 +177,6 @@
       "faixa": "A definir",
       "imagem": "golpes/makgi.webp",
       "alt": "Praticante segurando a espada na horizontal acima da cabeça em posição de defesa"
-    }
-  ],
-  "videos": [
-    {
-      "id": "haidong-gumdo-demo",
-      "youtube_id": "qjrYw-LjlB0",
-      "titulo": "Korean Sword - Haidong Gumdo",
-      "duracao": "PT50S",
-      "categoria": "treinos"
-    },
-    {
-      "id": "haedong-kumdo-basico-espada",
-      "youtube_id": "2mG4A7Sr1fU",
-      "titulo": "Haedong Kumdo - The basics: how to use your sword",
-      "duracao": "PT10M7S",
-      "categoria": "treinos"
     }
   ]
 }
